@@ -32,6 +32,7 @@
 
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
+	document.addEventListener("mousemove", mouseMoveHandler, false);
 
 	function keyDownHandler(e) {
     if(e.keyCode == 39) {
@@ -50,6 +51,31 @@
         leftPressed = false;
     }
 	}
+
+	function mouseMoveHandler(e) {
+    var relativeX = e.clientX - canvas.offsetLeft;
+	    if(relativeX > 0 && relativeX < canvas.width) {
+	        paddleX = relativeX - paddleWidth/2;
+	    }
+	}
+
+	function collisionDetection() {
+    for(c=0; c<brickColumnCount; c++) {
+        for(r=0; r<brickRowCount; r++) {
+            var b = bricks[c][r];
+            if(b.status == 1) {
+                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    dy = -dy;
+                    b.status = 0;
+                    score++;
+                     if(score == brickRowCount*brickColumnCount) {
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        document.location.reload();
+                }
+            }
+        }
+    }
+}}
 
 	function drawBricks() {
     for(c=0; c<brickColumnCount; c++) {
@@ -85,20 +111,7 @@
 	    ctx.closePath();
 	}
 
-	function collisionDetection() {
-    for(c=0; c<brickColumnCount; c++) {
-        for(r=0; r<brickRowCount; r++) {
-            var b = bricks[c][r];
-            if(b.status == 1) {
-                if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-                    dy = -dy;
-                    b.status = 0;
-                    score++;
-                }
-            }
-        }
-    }
-}
+
 
 	function drawScore() {
 	    ctx.font = "16px Arial";
@@ -108,9 +121,9 @@
 
 function draw(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawBricks();
 	drawBall();
 	drawPaddle();
-	drawBricks();
 	drawScore();
 	collisionDetection();
 	
@@ -132,10 +145,10 @@ function draw(){
     }
 
 	if(rightPressed && paddleX < canvas.width-paddleWidth) {
-        paddleX += 7;
+        paddleX += 5;
     }
     else if(leftPressed && paddleX > 0) {
-        paddleX -= 7;
+        paddleX -= 5;
     }
 
     x += dx;
