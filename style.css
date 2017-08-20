@@ -8,9 +8,10 @@
 			text-align: center;
 			padding-bottom: 20px;
 			font-style: Arial;
+			color: purple;
     	}
     	canvas { 
-    		background: #eee; 
+    		background: #D2B5D3; 
     		display: block; 
     		margin: 0 auto;
     		 }
